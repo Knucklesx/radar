@@ -2,15 +2,20 @@ import { DashboardHeader } from "@/components/layout/dashboard-header";
 
 import { APP_CONFIG } from "@/config/app";
 import { messages } from "@/config/messages";
-import { STORES } from "@/config/stores";
+
+import { AddListingForm } from "@/features/listings/components/add-listing-form";
+
+import {
+	ProductListings,
+	type ProductListing,
+} from "@/features/listings/components/product-listings";
+
+import type { MonitoredProduct } from "@/features/products/types";
 
 import { createClient } from "@/lib/supabase/server";
 import { formatPrice } from "@/lib/utils/format-price";
 
-import type { MonitoredProduct } from "@/features/products/types";
-
-import { ArrowLeft, ExternalLink, Store } from "lucide-react";
-
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { connection } from "next/server";
@@ -19,12 +24,6 @@ import { Suspense } from "react";
 type Props = {
 	params: Promise<{ id: string }>;
 };
-
-function storeName(storeId: string) {
-	const store = Object.values(STORES).find((item) => item.id === storeId);
-
-	return store?.name ?? storeId;
-}
 
 async function ProductContent({ params }: Props) {
 	await connection();
@@ -57,17 +56,36 @@ async function ProductContent({ params }: Props) {
 		target_price: data.target_price === null ? null : Number(data.target_price),
 	};
 
-	const { data: listings, error: listingsError } = await supabase
+	const { data: listingsData, error: listingsError } = await supabase
 		.from("product_listings")
 		.select("id, store_id, listing_url, external_id")
 		.eq("product_id", product.id)
 		.eq("user_id", userId)
-		.order("created_at", {
-			ascending: true,
-		});
+		.order("created_at", { ascending: true });
+
+	const listings: ProductListing[] = listingsData ?? [];
 
 	const email =
 		typeof auth.claims.email === "string" ? auth.claims.email : null;
+
+	const attributes = [
+		{
+			label: messages.products.brand,
+			value: product.brand,
+		},
+		{
+			label: messages.products.model,
+			value: product.model,
+		},
+		{
+			label: messages.products.variant,
+			value: product.variant,
+		},
+		{
+			label: messages.products.color,
+			value: product.color,
+		},
+	];
 
 	return (
 		<main className="radar-page">
@@ -109,7 +127,7 @@ async function ProductContent({ params }: Props) {
 						</p>
 
 						<p className="radar-heading mt-2 text-3xl font-bold">
-							{listingsError ? "—" : (listings?.length ?? 0)}
+							{listingsError ? "—" : listings.length}
 						</p>
 					</div>
 				</section>
@@ -120,24 +138,7 @@ async function ProductContent({ params }: Props) {
 					</h2>
 
 					<dl className="mt-5 grid gap-5 sm:grid-cols-2">
-						{[
-							{
-								label: messages.products.brand,
-								value: product.brand,
-							},
-							{
-								label: messages.products.model,
-								value: product.model,
-							},
-							{
-								label: messages.products.variant,
-								value: product.variant,
-							},
-							{
-								label: messages.products.color,
-								value: product.color,
-							},
-						].map((item) => (
+						{attributes.map((item) => (
 							<div key={item.label}>
 								<dt className="radar-caption text-sm">{item.label}</dt>
 
@@ -149,51 +150,23 @@ async function ProductContent({ params }: Props) {
 					</dl>
 				</section>
 
-				<section className="space-y-4">
-					<h2 className="radar-heading text-xl font-semibold">
-						{messages.listings.title}
-					</h2>
+				<AddListingForm productId={product.id} />
 
-					{listingsError ? (
-						<p role="alert" className="radar-error">
-							{messages.products.listingsError}
-						</p>
-					) : !listings?.length ? (
-						<div className="radar-card border-dashed p-8 text-center">
-							<Store size={28} className="mx-auto text-[var(--text-muted)]" />
+				<ProductListings listings={listings} error={Boolean(listingsError)} />
+			</div>
+		</main>
+	);
+}
 
-							<p className="radar-muted mt-3 text-sm">
-								{messages.products.noListingsDescription}
-							</p>
-						</div>
-					) : (
-						<div className="grid gap-4 sm:grid-cols-2">
-							{listings.map((listing) => (
-								<article key={listing.id} className="radar-card p-5">
-									<h3 className="radar-heading font-semibold">
-										{storeName(listing.store_id)}
-									</h3>
+function ProductSkeleton() {
+	return (
+		<main className="radar-page px-6 py-10">
+			<div className="mx-auto max-w-6xl space-y-6">
+				<div className="h-8 w-48 animate-pulse rounded bg-[var(--surface-secondary)]" />
 
-									{listing.external_id && (
-										<p className="radar-caption mt-2 text-xs">
-											{listing.external_id}
-										</p>
-									)}
+				<div className="radar-card h-40 animate-pulse" />
 
-									<a
-										href={listing.listing_url}
-										target="_blank"
-										rel="noopener noreferrer"
-										className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-[var(--accent)] hover:underline"
-									>
-										{messages.listings.url}
-										<ExternalLink size={15} />
-									</a>
-								</article>
-							))}
-						</div>
-					)}
-				</section>
+				<div className="radar-card h-48 animate-pulse" />
 			</div>
 		</main>
 	);
@@ -201,15 +174,7 @@ async function ProductContent({ params }: Props) {
 
 export default function ProductPage({ params }: Props) {
 	return (
-		<Suspense
-			fallback={
-				<main className="radar-page px-6 py-10">
-					<div className="mx-auto max-w-6xl">
-						<div className="radar-card h-48 animate-pulse" />
-					</div>
-				</main>
-			}
-		>
+		<Suspense fallback={<ProductSkeleton />}>
 			<ProductContent params={params} />
 		</Suspense>
 	);

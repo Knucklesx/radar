@@ -88,9 +88,22 @@ export const ptBR = {
 	listings: {
 		title: "Anúncios acompanhados",
 		add: "Adicionar anúncio",
-		store: "Loja",
+		description: "Vincule anúncios de diferentes lojas ao produto.",
 		url: "Link do anúncio",
+		urlPlaceholder: "https://www.amazon.com.br/dp/...",
+		urlHelp: "Aceitamos links da Amazon Brasil, Mercado Livre e Magalu.",
+		store: "Loja",
+		submit: "Vincular anúncio",
+		submitting: "Vinculando...",
+		success: "Anúncio vinculado com sucesso!",
+		invalidUrl: "Informe uma URL HTTPS válida de uma loja aceita.",
+		duplicate: "Este anúncio já está cadastrado no seu Radar.",
+		invalidProduct: "Produto não encontrado ou sem permissão de acesso.",
+		createError: "Não foi possível vincular o anúncio.",
+		viewStore: "Abrir anúncio na loja",
+		externalId: "Código do anúncio",
 		empty: "Nenhum anúncio vinculado.",
+		pendingCollection: "Coleta de preços ainda não ativada.",
 	},
 
 	prices: {
