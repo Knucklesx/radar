@@ -1,3 +1,5 @@
+import { APP_CONFIG } from "@/config/app";
+import { messages } from "@/config/messages";
 import {
 	Bell,
 	ChartNoAxesCombined,
@@ -5,9 +7,7 @@ import {
 	Search,
 	ShieldCheck,
 } from "lucide-react";
-
-import { APP_CONFIG } from "@/config/app";
-import { messages } from "@/config/messages";
+import Link from "next/link";
 
 const features = [
 	{
@@ -54,9 +54,12 @@ export default function HomePage() {
 					</p>
 
 					<div className="mt-10">
-						<span className="inline-flex rounded-xl bg-blue-600 px-8 py-4 font-semibold text-white">
-							{messages.home.actionUnavailable}
-						</span>
+						<Link
+							href="/cadastro"
+							className="inline-flex rounded-xl bg-blue-600 px-8 py-4 font-semibold text-white hover:bg-blue-700"
+						>
+							{messages.home.primaryAction}
+						</Link>
 					</div>
 
 					<p className="mt-4 text-sm text-slate-400">
