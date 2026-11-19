@@ -172,4 +172,28 @@ export const ptBR = {
 	account: {
 		label: "Minha conta",
 	},
+
+	priceHistory: {
+		title: "Preços observados",
+		description: "Últimos valores coletados dos anúncios vinculados.",
+		observedPrice: "Preço observado",
+		targetPrice: "Preço-alvo",
+		aboveTarget: "acima do preço-alvo",
+		belowTarget: "abaixo do preço-alvo",
+		onTarget: "Igual ao preço-alvo",
+		lastCollection: "Última coleta",
+		source: "Fonte",
+		noData: "Nenhum preço registrado.",
+		loadError: "Não foi possível carregar os preços observados.",
+		pending: "Não verificado",
+		verified: "Verificado",
+		rejected: "Rejeitado",
+		pendingTitle: "Oferta ainda não confirmada",
+		pendingDescription:
+			"A fonte retornou um preço, mas ainda não confirmamos vendedor, condição de novo e compatibilidade completa.",
+		rejectedDescription:
+			"A observação foi rejeitada na validação e não deve ser considerada uma oferta elegível.",
+		missingTarget: "Defina um preço-alvo para comparar.",
+		notForAlerts: "Preços não verificados não são utilizados para alertas.",
+	},
 } as const;

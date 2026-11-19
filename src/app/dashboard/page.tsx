@@ -1,11 +1,9 @@
 import { DashboardHeader } from "@/components/layout/dashboard-header";
-
 import { APP_CONFIG } from "@/config/app";
 import { messages } from "@/config/messages";
 
 import { AddProductPanel } from "@/features/products/components/add-product-panel";
 import { ProductGrid } from "@/features/products/components/product-grid";
-
 import type { MonitoredProduct } from "@/features/products/types";
 
 import { createClient } from "@/lib/supabase/server";
@@ -34,15 +32,36 @@ async function DashboardContent() {
 		.from("monitored_products")
 		.select("id, name, brand, model, variant, color, target_price")
 		.eq("user_id", userId)
-		.order("created_at", {
-			ascending: false,
-		});
+		.order("created_at", { ascending: false });
 
 	const products: MonitoredProduct[] = (data ?? []).map((product) => ({
 		...product,
 		target_price:
 			product.target_price === null ? null : Number(product.target_price),
 	}));
+
+	const listingCounts: Record<string, number> = {};
+	let countsError = false;
+
+	if (products.length > 0 && !productsError) {
+		const { data: listings, error } = await supabase
+			.from("product_listings")
+			.select("product_id")
+			.eq("user_id", userId)
+			.in(
+				"product_id",
+				products.map((product) => product.id),
+			);
+
+		if (error) {
+			countsError = true;
+		} else {
+			for (const listing of listings ?? []) {
+				listingCounts[listing.product_id] =
+					(listingCounts[listing.product_id] ?? 0) + 1;
+			}
+		}
+	}
 
 	return (
 		<main className="radar-page">
@@ -59,12 +78,12 @@ async function DashboardContent() {
 
 				<AddProductPanel />
 
-				{productsError ? (
+				{productsError || countsError ? (
 					<div role="alert" className="radar-error">
 						{messages.errors.generic}
 					</div>
 				) : (
-					<ProductGrid products={products} />
+					<ProductGrid products={products} listingCounts={listingCounts} />
 				)}
 			</div>
 		</main>
@@ -75,12 +94,9 @@ function DashboardSkeleton() {
 	return (
 		<main className="radar-page">
 			<div className="mx-auto max-w-6xl space-y-6 px-6 py-10">
-				<div className="h-8 w-48 animate-pulse rounded-lg bg-[var(--surface-secondary)]" />
-
+				<div className="h-8 w-48 animate-pulse rounded bg-[var(--surface-secondary)]" />
 				<div className="h-5 w-80 max-w-full animate-pulse rounded bg-[var(--surface-secondary)]" />
-
 				<div className="radar-card h-20 animate-pulse" />
-
 				<div className="radar-card h-48 w-full max-w-sm animate-pulse" />
 			</div>
 		</main>

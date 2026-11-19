@@ -5,9 +5,10 @@ import { ProductCard } from "./product-card";
 
 type Props = {
 	products: MonitoredProduct[];
+	listingCounts: Record<string, number>;
 };
 
-export function ProductGrid({ products }: Props) {
+export function ProductGrid({ products, listingCounts }: Props) {
 	return (
 		<section className="space-y-4">
 			<h2 className="radar-heading text-xl font-bold">
@@ -21,7 +22,11 @@ export function ProductGrid({ products }: Props) {
 			) : (
 				<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 					{products.map((product) => (
-						<ProductCard key={product.id} product={product} />
+						<ProductCard
+							key={product.id}
+							product={product}
+							listingCount={listingCounts[product.id] ?? 0}
+						/>
 					))}
 				</div>
 			)}
