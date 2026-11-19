@@ -1,18 +1,20 @@
 "use client";
 
-import { APP_CONFIG } from "@/config/app";
-import { messages } from "@/config/messages";
-import { authenticate, type AuthState } from "@/features/auth/server/actions";
 import Link from "next/link";
 import { useActionState } from "react";
+
+import { APP_CONFIG } from "@/config/app";
+import { messages } from "@/config/messages";
+
+import { authenticate, type AuthState } from "@/features/auth/server/actions";
+
+type Props = {
+	mode: "login" | "signup";
+};
 
 const initialAuthState: AuthState = {
 	error: null,
 	success: null,
-};
-
-type Props = {
-	mode: "login" | "signup";
 };
 
 export function AuthForm({ mode }: Props) {
@@ -22,97 +24,88 @@ export function AuthForm({ mode }: Props) {
 	);
 
 	const isSignup = mode === "signup";
-
 	const t = messages.auth;
 
 	return (
-		<form
-			action={action}
-			className="space-y-5 rounded-2xl border border-slate-200 bg-white p-8 shadow-sm"
-		>
+		<form action={action} className="radar-card space-y-5 p-8">
 			<input type="hidden" name="mode" value={mode} />
 
+			{/* Título */}
 			<div>
-				<h1 className="text-2xl font-bold text-slate-900">
+				<h1 className="radar-heading text-2xl font-bold">
 					{isSignup ? t.signupTitle : t.loginTitle}
 				</h1>
 
-				<p className="mt-2 text-sm text-slate-500">
+				<p className="radar-muted mt-2 text-sm">
 					{isSignup ? t.signupDescription : t.loginDescription}
 				</p>
 			</div>
 
+			{/* E-mail */}
 			<div>
-				<label
-					htmlFor="email"
-					className="mb-2 block text-sm font-medium text-slate-700"
-				>
+				<label htmlFor="auth-email" className="radar-label">
 					{t.email}
 				</label>
 
 				<input
-					id="email"
+					id="auth-email"
 					name="email"
 					type="email"
 					autoComplete="email"
 					required
 					maxLength={254}
 					disabled={pending}
-					className="w-full rounded-lg border border-slate-300 px-4 py-3 text-slate-900"
+					className="radar-input"
 				/>
 			</div>
 
+			{/* Senha */}
 			<div>
-				<label
-					htmlFor="password"
-					className="mb-2 block text-sm font-medium text-slate-700"
-				>
+				<label htmlFor="auth-password" className="radar-label">
 					{t.password}
 				</label>
 
 				<input
-					id="password"
+					id="auth-password"
 					name="password"
 					type="password"
 					autoComplete={isSignup ? "new-password" : "current-password"}
 					required
 					minLength={8}
 					disabled={pending}
-					className="w-full rounded-lg border border-slate-300 px-4 py-3 text-slate-900"
+					className="radar-input"
 				/>
 			</div>
 
+			{/* Mensagem de erro */}
 			{state.error && (
-				<p
-					role="alert"
-					className="rounded-lg bg-red-50 p-3 text-sm text-red-700"
-				>
+				<p role="alert" className="radar-error">
 					{state.error}
 				</p>
 			)}
 
+			{/* Mensagem de sucesso */}
 			{state.success && (
-				<p
-					role="status"
-					className="rounded-lg bg-green-50 p-3 text-sm text-green-700"
-				>
+				<p role="status" className="radar-success">
 					{state.success}
 				</p>
 			)}
 
+			{/* Enviar */}
 			<button
 				type="submit"
 				disabled={pending}
-				className="w-full rounded-lg bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+				className="radar-button-primary w-full"
 			>
 				{pending ? t.submitting : isSignup ? t.signupAction : t.loginAction}
 			</button>
 
-			<p className="text-center text-sm text-slate-600">
+			{/* Alternância entre login e cadastro */}
+			<p className="radar-muted text-center text-sm">
 				{isSignup ? t.hasAccount : t.noAccount}{" "}
 				<Link
 					href={isSignup ? APP_CONFIG.routes.login : "/cadastro"}
-					className="font-semibold text-blue-600 hover:underline"
+					className="font-semibold text-[var(--accent)] hover:underline"
 				>
 					{isSignup ? t.signIn : t.createAccount}
 				</Link>

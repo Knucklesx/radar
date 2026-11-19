@@ -1,26 +1,190 @@
+
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+
+  --background: #f8fafc;
+  --foreground: #0f172a;
+
+  --surface: #ffffff;
+  --surface-secondary: #f1f5f9;
+
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+
+  --border: #dbe3ee;
+  --input-border: #cbd5e1;
+
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+
+  --success-background: #f0fdf4;
+  --success-text: #166534;
+
+  --error-background: #fef2f2;
+  --error-text: #b91c1c;
+}
+
+html.dark {
+  color-scheme: dark;
+
+  --background: #0b1220;
+  --foreground: #f8fafc;
+
+  --surface: #172235;
+  --surface-secondary: #1e293b;
+
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+
+  --border: #334155;
+  --input-border: #475569;
+
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+
+  --success-background: #052e20;
+  --success-text: #86efac;
+
+  --error-background: #450a0a;
+  --error-text: #fca5a5;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-surface: var(--surface);
+  --color-primary: var(--accent);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Layout */
+
+.radar-page {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text-primary);
+}
+
+.radar-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.radar-card {
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--surface);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.04);
+}
+
+/* Tipografia */
+
+.radar-heading {
+  color: var(--text-primary);
+}
+
+.radar-muted {
+  color: var(--text-secondary);
+}
+
+.radar-caption {
+  color: var(--text-muted);
+}
+
+/* Formulários */
+
+.radar-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.radar-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--input-border);
+  border-radius: 0.5rem;
+  background: var(--surface);
+  color: var(--text-primary);
+  outline: none;
+}
+
+.radar-input::placeholder {
+  color: var(--text-muted);
+}
+
+.radar-input:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.radar-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Botões */
+
+.radar-button-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.radar-button-primary:hover {
+  background: var(--accent-hover);
+}
+
+.radar-button-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.radar-button-secondary {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--surface);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.radar-button-secondary:hover {
+  background: var(--surface-secondary);
+}
+
+/* Feedback */
+
+.radar-success {
+  background: var(--success-background);
+  color: var(--success-text);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.radar-error {
+  background: var(--error-background);
+  color: var(--error-text);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  font-size: 0.875rem;
 }

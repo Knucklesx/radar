@@ -58,6 +58,31 @@ export const ptBR = {
 		condition: "Condição",
 		newCondition: "Somente novo",
 		empty: "Você ainda não acompanha nenhum produto.",
+		variant: "Variante",
+		create: "Cadastrar produto",
+		creating: "Salvando produto...",
+		createSuccess: "Produto cadastrado com sucesso!",
+		createError: "Não foi possível cadastrar o produto.",
+		invalidPrice: "Informe um preço-alvo válido.",
+		newOnly: "Somente produtos novos",
+		noListings: "Nenhum anúncio vinculado",
+		optional: "Opcional",
+		validation: {
+			name: "Informe um nome de 3 a 120 caracteres.",
+			brand: "Informe uma marca de 2 a 60 caracteres.",
+			model: "Informe um modelo de 2 a 120 caracteres.",
+			variant: "A variante deve ter até 100 caracteres.",
+			color: "A cor deve ter até 60 caracteres.",
+		},
+		addDescription: "Cadastre um novo produto para acompanhar.",
+		details: "Detalhes do produto",
+		detailsDescription: "Acompanhe os anúncios e os preços deste produto.",
+		viewDetails: "Ver detalhes",
+		linkedListings: "Anúncios vinculados",
+		backToDashboard: "Voltar ao meu Radar",
+		productNotFound: "Produto não encontrado.",
+		listingsError: "Não foi possível carregar os anúncios.",
+		noListingsDescription: "Você ainda não vinculou anúncios a este produto.",
 	},
 
 	listings: {
@@ -114,5 +139,24 @@ export const ptBR = {
 		welcome: "Sua conta está pronta!",
 		empty: "Você ainda não cadastrou nenhum produto.",
 		nextStep: "Em breve, você poderá cadastrar seu primeiro produto.",
+	},
+
+	validation: {
+		name: "Informe um nome de 3 a 120 caracteres.",
+		brand: "Informe uma marca de 2 a 60 caracteres.",
+		model: "Informe um modelo de 2 a 120 caracteres.",
+		variant: "A variante deve ter até 100 caracteres.",
+		color: "A cor deve ter até 60 caracteres.",
+	},
+
+	theme: {
+		label: "Aparência",
+		light: "Claro",
+		dark: "Escuro",
+		system: "Sistema",
+	},
+
+	account: {
+		label: "Minha conta",
 	},
 } as const;

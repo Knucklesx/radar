@@ -1,3 +1,4 @@
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import { APP_CONFIG } from "@/config/app";
 import { messages } from "@/config/messages";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -20,11 +21,10 @@ export const metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
 	return (
-		<html
-			lang="en"
-			className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-		>
-			<body className="min-h-full flex flex-col">{children}</body>
+		<html lang="pt-BR" suppressHydrationWarning>
+			<body className={`${geistSans.variable} ${geistMono.variable}`}>
+				<ThemeProvider>{children}</ThemeProvider>
+			</body>
 		</html>
 	);
 }
